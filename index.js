@@ -34,8 +34,10 @@ app.get("/api/:date", function (req, res) {
 });
 
 app.get("/api", function (req, res) {
-  const date = new Date();
-  res.json({ unix: date.getTime(), utc: date.toUTCString() });
+  res.json({
+    unix: new Date().getTime(),
+    utc: new Date().toUTCString(),
+  });
 });
 
 // Listen on port set in environment variable or default to 3000
