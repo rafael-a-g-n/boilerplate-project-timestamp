@@ -18,25 +18,28 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
 
+const isInvalidDate = (date) => date.toUTCString() === "Invalid Date";
+
 // your first API endpoint...
-app.get("/api/:date?", function (req, res) {
-  let dateString = req.params.date;
-  if (!dateString) {
-    const now = new Date();
-    const unix = now.getTime();
-    const utc = now.toUTCString();
-    return res.json({ unix, utc });
+app.get("/api/:date", function (req, res) {
+  let date = new Date(req.params.date);
+  if (isInvalidDate(date)) {
+    date = new Date(+req.params.date);
   }
-  if (!isNaN(dateString)) {
-    dateString = parseInt(dateString);
+  if (isInvalidDate(date)) {
+    res.json({ error: "Invalid Date" });
+    return;
   }
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    return res.json({ error: "Invalid Date" });
-  }
-  const unix = date.getTime();
-  const utc = date.toUTCString();
-  return res.json({ unix, utc });
+  res.json({ unix: date.getTime(), utc: date.toUTCString() });
+});
+
+app.get("/api", (req, res) => {
+  let date = new Date();
+  let UTC = date.getTime();
+  UTC = new Date(UTC);
+  UTS = UTC.toUTCString();
+  let UNIX = date.getTime();
+  res.json({ unix: UNIX, utc: UTS });
 });
 
 // Listen on port set in environment variable or default to 3000
