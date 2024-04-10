@@ -22,9 +22,10 @@ app.get("/", function (req, res) {
 app.get("/api/:date?", function (req, res) {
   let dateString = req.params.date;
   if (!dateString) {
-    const now = new Date();
-    const unix = now.getTime();
-    const utc = now.toUTCString();
+    const now = Date.now();
+    const date = new Date(now);
+    const unix = now;
+    const utc = date.toUTCString();
     return res.json({ unix, utc });
   }
   if (!isNaN(dateString)) {
