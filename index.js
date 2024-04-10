@@ -23,10 +23,8 @@ app.get("/api/:date?", function (req, res) {
   let dateString = req.params.date;
   if (!dateString) {
     const now = Date.now();
-    const date = new Date(now);
-    const unix = now;
-    const utc = date.toUTCString();
-    return res.json({ unix, utc });
+    const utc = new Date(now).toUTCString();
+    return res.json({ unix: now, utc });
   }
   if (!isNaN(dateString)) {
     dateString = parseInt(dateString);
