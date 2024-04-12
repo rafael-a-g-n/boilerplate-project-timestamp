@@ -22,22 +22,35 @@ const isInvalidDate = (date) => date.toUTCString() === "Invalid Date";
 
 // your first API endpoint...
 app.get("/api/:date", function (req, res) {
-  let date = new Date(req.params.date);
-  if (isInvalidDate(date)) {
-    date = new Date(+req.params.date);
+  //console.log()
+  let d = new Date(req.params.date);
+  if (d == "Invalid Date") {
+    d.setTime(Number(req.params.date));
   }
-  if (isInvalidDate(date)) {
+  let res1 = d.getTime() || "Invalid Date";
+  if (res1 == "Invalid Date") {
     res.json({ error: "Invalid Date" });
-    return;
+  } else {
+    res.json({ unix: res1, utc: d.toUTCString() });
   }
-  res.json({ unix: date.getTime(), utc: date.toUTCString() });
 });
-
-app.get("/api", (req, res) => {
-  res.json({
-    unix: new Date().getTime(),
-    utc: new Date().toUTCString(),
-  });
+app.get("/api:date?", (req, res) => {
+  let d = new Date();
+  if (req.query.date == "" || typeof req.query.date == "undefined") {
+    res.json({ unix: d.getTime(), utc: d.toUTCString() });
+    res.end();
+  } else {
+    d = new Date(req.params.date);
+    if (d == "Invalid Date") {
+      d.setTime(Number(req.params.date));
+    }
+    let res1 = d.getTime() || "Invalid Date";
+    if (res1 == "Invalid Date") {
+      res.json({ error: "Invalid Date" });
+    } else {
+      res.json({ unix: res1, utc: d.toUTCString() });
+    }
+  }
 });
 
 // Listen on port set in environment variable or default to 3000
